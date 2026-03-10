@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.2/schema.json",
+  "schema_version": "v2.2",
+  "name_for_human": "Policy Compare",
+  "description_for_human": "Compare insurance policies side-by-side and identify coverage gaps",
+  "description_for_model": "This plugin connects to the Policy Compare MCP server which provides tools for comparing insurance policies, identifying coverage gaps, viewing policy details, and generating recommendations. The server renders rich interactive widgets in the chat for visual policy comparison matrices, gap analysis charts, policy detail cards, and recommendation summaries.",
+  "namespace": "policycompare",
+  "capabilities": {
+    "localization": {}
+  },
+  "runtimes": [
+    {
+      "type": "RemoteMCPServer",
+      "spec": {
+        "url": "https://${{DEVTUNNEL_URL}}/mcp"
+      }
+    }
+  ]
+}

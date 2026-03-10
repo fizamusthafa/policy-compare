@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/vDevPreview/MicrosoftTeams.schema.json",
+  "manifestVersion": "devPreview",
+  "id": "${{TEAMS_APP_ID}}",
+  "version": "1.0.0",
+  "name": {
+    "short": "Policy Compare",
+    "full": "Insurance Policy Comparison & Gap Analysis"
+  },
+  "description": {
+    "short": "Compare insurance policies and identify coverage gaps",
+    "full": "A comprehensive insurance coverage advisor that helps you compare policies side-by-side, identify coverage gaps, view detailed policy information, and receive actionable recommendations — all through interactive widgets rendered directly in chat."
+  },
+  "developer": {
+    "name": "Policy Compare",
+    "websiteUrl": "https://example.com",
+    "privacyUrl": "https://example.com/privacy",
+    "termsOfUseUrl": "https://example.com/terms"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "accentColor": "#4F6BED",
+  "copilotAgents": {
+    "declarativeAgents": [
+      {
+        "id": "policyCompareAgent",
+        "file": "declarativeAgent.json"
+      }
+    ]
+  }
+}
