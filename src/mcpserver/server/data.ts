@@ -60,12 +60,21 @@ export async function upsertPolicy(policy: Policy): Promise<void> {
 
 export async function getPolicy(id: string): Promise<Policy | null> {
   const client = getTableClient();
-  const entities = client.listEntities({
+  // Try by RowKey (internal ID) first
+  const byId = client.listEntities({
     queryOptions: { filter: `RowKey eq '${id}'` },
   });
-  for await (const entity of entities) {
+  for await (const entity of byId) {
     const raw = entity["data"] as string | undefined;
     if (raw) return JSON.parse(raw) as Policy;
+  }
+  // Fallback: scan all entities for matching policyNumber
+  const all = client.listEntities();
+  for await (const entity of all) {
+    const raw = entity["data"] as string | undefined;
+    if (!raw) continue;
+    const policy = JSON.parse(raw) as Policy;
+    if (policy.policyNumber === id) return policy;
   }
   return null;
 }
