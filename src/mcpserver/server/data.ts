@@ -64,7 +64,8 @@ export async function getPolicy(id: string): Promise<Policy | null> {
     queryOptions: { filter: `RowKey eq '${id}'` },
   });
   for await (const entity of entities) {
-    return JSON.parse(entity.data as string) as Policy;
+    const raw = entity["data"] as string | undefined;
+    if (raw) return JSON.parse(raw) as Policy;
   }
   return null;
 }
@@ -74,7 +75,8 @@ export async function getAllPolicies(): Promise<Policy[]> {
   const policies: Policy[] = [];
   const entities = client.listEntities();
   for await (const entity of entities) {
-    policies.push(JSON.parse(entity.data as string) as Policy);
+    const raw = entity["data"] as string | undefined;
+    if (raw) policies.push(JSON.parse(raw) as Policy);
   }
   return policies;
 }
@@ -86,7 +88,8 @@ export async function getPoliciesByType(type: string): Promise<Policy[]> {
     queryOptions: { filter: `PartitionKey eq '${type}'` },
   });
   for await (const entity of entities) {
-    policies.push(JSON.parse(entity.data as string) as Policy);
+    const raw = entity["data"] as string | undefined;
+    if (raw) policies.push(JSON.parse(raw) as Policy);
   }
   return policies;
 }

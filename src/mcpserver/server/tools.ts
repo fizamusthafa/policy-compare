@@ -383,6 +383,7 @@ export function createServer(): McpServer {
   // 5. search-policies
   server.tool(
     "search-policies",
+    "Search and filter insurance policies by type, carrier, or minimum coverage amount",
     SearchSchema,
     async ({ type, carrier, minCoverage }) => {
       const policies = await searchPolicies({ type, carrier, minCoverage });
@@ -396,6 +397,7 @@ export function createServer(): McpServer {
   // 6. add-policy
   server.tool(
     "add-policy",
+    "Add a new insurance policy to the comparison set",
     { policy: z.string().describe("Full policy object as JSON string") },
     async ({ policy: policyJson }) => {
       const policy = JSON.parse(policyJson) as Policy;
@@ -407,6 +409,7 @@ export function createServer(): McpServer {
   // 7. remove-policy
   server.tool(
     "remove-policy",
+    "Remove a policy from the comparison set",
     { policyId: z.string().describe("The ID of the policy to remove") },
     async ({ policyId }) => {
       const deleted = await deletePolicy(policyId);
@@ -417,6 +420,7 @@ export function createServer(): McpServer {
   // 8. get-policy-summary
   server.tool(
     "get-policy-summary",
+    "Get a detailed text summary of a specific policy for model context",
     { policyId: z.string().describe("The policy ID") },
     async ({ policyId }) => {
       const p = await getPolicy(policyId);
@@ -442,6 +446,7 @@ export function createServer(): McpServer {
   // 9. calculate-gap-score
   server.tool(
     "calculate-gap-score",
+    "Calculate a numeric coverage gap analysis score with category breakdown",
     PolicyIdsOptionalSchema,
     async ({ policyIds }) => {
       let policies: Policy[];
@@ -464,6 +469,7 @@ export function createServer(): McpServer {
   // 10. get-quote-estimate
   server.tool(
     "get-quote-estimate",
+    "Estimate the premium impact of a coverage change such as increasing limits or adding coverage",
     QuoteSchema,
     async ({ policyId, changeType }) => {
       const policy = await getPolicy(policyId);
