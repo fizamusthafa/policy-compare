@@ -3,6 +3,7 @@
   "schema_version": "v2.4",
   "name_for_human": "Policy Compare",
   "description_for_human": "Compare insurance policies side-by-side and identify coverage gaps",
+  "contact_email": "publisher-email@example.com",
   "namespace": "policycompare",
   "functions": [
     {
@@ -50,7 +51,155 @@
     {
       "type": "RemoteMCPServer",
       "spec": {
-        "url": "https://6dl7q30m-3001.euw.devtunnels.ms/mcp"
+        "url": "https://6dl7q30m-3001.euw.devtunnels.ms/mcp",
+        "x-mcp_tool_description": {
+          "tools": [
+            {
+              "name": "show-policy-comparison",
+              "title": "Compare Policies",
+              "description": "Show an interactive side-by-side comparison matrix of 2-4 insurance policies with color-coded cells.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policyIds": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 4, "description": "Array of 2-4 policy IDs to compare" },
+                  "filterCategory": { "type": "string", "enum": ["property", "liability", "vehicle", "life", "medical", "extras"], "description": "Optional category filter" }
+                },
+                "required": ["policyIds"]
+              },
+              "annotations": { "readOnlyHint": true },
+              "execution": { "taskSupport": "forbidden" },
+              "_meta": {
+                "ui": { "resourceUri": "ui://show-policy-comparison/mcp-app.html" },
+                "ui/resourceUri": "ui://show-policy-comparison/mcp-app.html"
+              }
+            },
+            {
+              "name": "show-gap-analysis",
+              "title": "Gap Analysis",
+              "description": "Show a visual gap analysis highlighting under-coverage, overlapping coverage, with risk scenarios.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policyIds": { "type": "array", "items": { "type": "string" }, "description": "Policy IDs to analyze. If empty, analyzes all." }
+                }
+              },
+              "annotations": { "readOnlyHint": true },
+              "execution": { "taskSupport": "forbidden" },
+              "_meta": {
+                "ui": { "resourceUri": "ui://show-gap-analysis/mcp-app.html" },
+                "ui/resourceUri": "ui://show-gap-analysis/mcp-app.html"
+              }
+            },
+            {
+              "name": "show-policy-detail",
+              "title": "Policy Details",
+              "description": "Show a detailed entity card for a single insurance policy.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policyId": { "type": "string", "description": "The policy ID" }
+                },
+                "required": ["policyId"]
+              },
+              "annotations": { "readOnlyHint": true },
+              "execution": { "taskSupport": "forbidden" },
+              "_meta": {
+                "ui": { "resourceUri": "ui://show-policy-detail/mcp-app.html" },
+                "ui/resourceUri": "ui://show-policy-detail/mcp-app.html"
+              }
+            },
+            {
+              "name": "show-recommendation",
+              "title": "Recommendations",
+              "description": "Show recommended actions to improve coverage with estimated cost impact.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policyIds": { "type": "array", "items": { "type": "string" }, "description": "Policy IDs to analyze. If empty, analyzes all." }
+                }
+              },
+              "annotations": { "readOnlyHint": true },
+              "execution": { "taskSupport": "forbidden" },
+              "_meta": {
+                "ui": { "resourceUri": "ui://show-recommendation/mcp-app.html" },
+                "ui/resourceUri": "ui://show-recommendation/mcp-app.html"
+              }
+            },
+            {
+              "name": "search-policies",
+              "description": "Search and filter insurance policies by type, carrier, or minimum coverage amount.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "description": "Policy type: homeowners, auto, life, umbrella" },
+                  "carrier": { "type": "string", "description": "Carrier name filter (partial match)" },
+                  "minCoverage": { "type": "number", "description": "Minimum coverage amount filter" }
+                }
+              },
+              "execution": { "taskSupport": "forbidden" }
+            },
+            {
+              "name": "add-policy",
+              "description": "Add a new insurance policy to the comparison set.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policy": { "type": "string", "description": "Full policy object as JSON string" }
+                },
+                "required": ["policy"]
+              },
+              "execution": { "taskSupport": "forbidden" }
+            },
+            {
+              "name": "remove-policy",
+              "description": "Remove a policy from the comparison set.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policyId": { "type": "string", "description": "The ID of the policy to remove" }
+                },
+                "required": ["policyId"]
+              },
+              "execution": { "taskSupport": "forbidden" }
+            },
+            {
+              "name": "get-policy-summary",
+              "description": "Get a detailed text summary of a specific policy for model context.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policyId": { "type": "string", "description": "The policy ID" }
+                },
+                "required": ["policyId"]
+              },
+              "execution": { "taskSupport": "forbidden" }
+            },
+            {
+              "name": "calculate-gap-score",
+              "description": "Calculate a numeric coverage gap analysis score with category breakdown.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policyIds": { "type": "array", "items": { "type": "string" }, "description": "Policy IDs to analyze. If empty, analyzes all." }
+                }
+              },
+              "execution": { "taskSupport": "forbidden" }
+            },
+            {
+              "name": "get-quote-estimate",
+              "description": "Estimate the premium impact of a coverage change such as increasing limits or adding coverage.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "policyId": { "type": "string", "description": "The policy ID to estimate changes for" },
+                  "changeType": { "type": "string", "enum": ["increase-liability", "add-collision", "add-comprehensive", "lower-deductible", "add-umbrella", "add-flood"], "description": "Type of coverage change" }
+                },
+                "required": ["policyId", "changeType"]
+              },
+              "execution": { "taskSupport": "forbidden" }
+            }
+          ]
+        }
       },
       "run_for_functions": [
         "show-policy-comparison",

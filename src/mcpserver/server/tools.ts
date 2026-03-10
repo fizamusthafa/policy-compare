@@ -490,16 +490,16 @@ export function createServer(): McpServer {
   // ══════════════════════════════════════════════════════════════════════════════
 
   const widgets = [
-    { uri: comparisonUri, file: "policy-comparison.html" },
-    { uri: gapAnalysisUri, file: "gap-analysis.html" },
-    { uri: policyDetailUri, file: "policy-detail.html" },
-    { uri: recommendationUri, file: "recommendation.html" },
+    { name: "Policy Comparison", uri: comparisonUri, file: "policy-comparison.html", description: "Side-by-side policy comparison widget" },
+    { name: "Gap Analysis", uri: gapAnalysisUri, file: "gap-analysis.html", description: "Coverage gap analysis widget" },
+    { name: "Policy Detail", uri: policyDetailUri, file: "policy-detail.html", description: "Detailed policy card widget" },
+    { name: "Recommendation", uri: recommendationUri, file: "recommendation.html", description: "Coverage recommendations widget" },
   ];
 
-  for (const { uri, file } of widgets) {
+  for (const { name, uri, file, description } of widgets) {
     registerAppResource(
-      server, uri, uri,
-      { mimeType: RESOURCE_MIME_TYPE },
+      server, name, uri,
+      { mimeType: RESOURCE_MIME_TYPE, description },
       async (): Promise<ReadResourceResult> => {
         const html = await readWidgetHtml(file);
         return { contents: [{ uri, mimeType: RESOURCE_MIME_TYPE, text: html }] };
