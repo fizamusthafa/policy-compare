@@ -51,7 +51,7 @@
     {
       "type": "RemoteMCPServer",
       "spec": {
-        "url": "https://6dl7q30m-3001.euw.devtunnels.ms/mcp",
+        "url": "https://xhbf6r8j-3001.euw.devtunnels.ms/mcp",
         "x-mcp_tool_description": {
           "tools": [
             {
